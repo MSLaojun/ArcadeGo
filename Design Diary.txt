@@ -1,0 +1,39 @@
+
+Need to define a "Core" interface to 
+    1. de-couple emulator and MT 
+    2. support multiple types of platform by plugin -- I don't know what you really are but I know you can do something
+    3. restrict developement of emulation core
+    4. can be different look-like (interface) for different MT components:
+        such as if one core support inspectable and then MT inspect component will trade it as an inspectable instance
+
+A "Core" cares these aspects:
+    1. Algorithm -- cpu-like component
+    2. Graphics  -- gpu-like component
+    3. Audio     -- apu-like component
+    4. Storage   -- mem rom disk image data -like component
+    5. Controll  -- joystick-like  component
+
+    Other:
+
+    Inspectable -- can decide what to watch, what to see
+        mem address
+        event
+        
+        so the inspect line can be : 
+        address -> value -> event
+        address varname support, address cascade support 
+        trigger condition support, enable / disable support 
+
+
+Need to build MT for Integrate core function into platform fuinction 
+
+Call a Core + MT + facade = Cell
+
+Question 
+    1. 异构的板子怎么办
+    2. where to put the cache trick for images / records
+    3. how to define the method to inspect
+        
+
+Cores will not exist in src folders but independently exist in other area, this will help developing core itself relatively independent and keep it small
+
