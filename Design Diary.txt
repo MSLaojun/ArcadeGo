@@ -37,3 +37,15 @@ Question
 
 Cores will not exist in src folders but independently exist in other area, this will help developing core itself relatively independent and keep it small
 
+
+Cell will do:
+    1. Startup with config
+    2. Load Game Image
+    3. Load Game Record
+    4. Be driven run / get
+    5. Save
+    6. Stop
+    7. release
+
+
+-- plugin version
