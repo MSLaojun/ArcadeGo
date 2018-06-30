@@ -9,6 +9,8 @@ import(
 	"errors"
 	"flag"
 	"fmt"
+	"time"
+	"bufio"
 	Core "github.com/MSLaojun/ArcadeGo/core"
 	Mantle "github.com/MSLaojun/ArcadeGo/mantle"
 )
@@ -32,12 +34,32 @@ func main(){
 	}
 	
 	// bootstrap for MT -- let MT do game status handling
-	
+	runtimeMT, err := Mantle.NewRuntimeMT(core)
+	if err != nil 
+	graphicMT, err := Mantle.NewGraphicMT(core)
+	audioMT, err := Mantle.NewRuntimeMT(core)
+	controllerMT, err := Mantle.NewControllerMT(core)
 	// bootstrap for front
 
 	sigChan := make(chan os.Signal, 10)
 	signal.Notify(sigChan)
-	
+
+	cmdChan := make(chan []byte, 1)
+	go receiveCmd(cmdChan)
+
+	startTime := time.Now()
+	for {
+		select{
+		case <-sigChan:
+			fmt.Println("Ctrl + C hit, gracefully quit")
+		case cmdLine := <-cmdChan:
+			processCmd(cmdLine)
+		case <-time.After(5*time.Minute):
+			hereNow := time.Now()
+			fmt.Println("Elapsed : ", hereNow - startTime)
+		}
+	}
+	fmt.Println("Bye~")
 }
 func loadPlugin(plat string) (interface{}, error){
 	pluginFileName, ok := platformPluginMap[plat]
@@ -51,6 +73,17 @@ func loadPlugin(plat string) (interface{}, error){
 	coreinst, err := pdll.Lookup("CoreInstance")
 	return coreinst, err
 }
-func waitForQuit(){
+
+func receiveCmd(C chan []byte){
+	inputReader := bufio.NewReader(os.Stdin)
 	
+	for {
+		input, err := inputReader.ReadBytes((byte)"\n")
+		if err != nil {
+			fmt.Println("Error read cmd!", err)
+			continue
+		}
+		inputReader <- input
+	}
 }
+

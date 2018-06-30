@@ -12,15 +12,15 @@ type RuntimeMT struct{
 	// record getter
 }
 
-func NewRuntime(core interface{}) (*RuntimeMT, error){
+func NewRuntimeMT(core interface{}) (*RuntimeMT, error){
 	runtimeMT := &RuntimeMT{}
-	coreRuntime, err := core.(IRuntime)
-	if err != nil {
+	coreRuntime, ok := core.(Core.IRuntime)
+	if ok != true {
 		// logger.log
 		return nil, errors.New("Error to load runtime from this core.")
 	}
 	runtimeMT.coreRuntime = coreRuntime
-	return runtime, nil
+	return runtimeMT, nil
 }
 
 func (self *RuntimeMT)Run() error{
@@ -77,10 +77,6 @@ func (self *RuntimeMT)LoadRecord() error{
 		return errors.New("Error to load game record.")
 	}
 	return nil
-}
-
-func (self *RuntimeMT)Run() error{
-	return self.coreRuntime.Run()
 }
 
 // func RunSync(){

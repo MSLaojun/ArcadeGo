@@ -1,39 +1,38 @@
 package mantle
 
 import (
-	core "github.com/deepnes/core"
+	"errors"
+	Core "github.com/MSLaojun/ArcadeGo/core"
 )
-// 
-// Audio middle layer
-// 
 
-type GraphicsMiddleLayer struct{
-	emuCore  	*core.Core
-
-	graphicsEnabled bool
+type GraphicMT struct{
+	coreGraphic		Core.IGraphic
 }
 
-func NewAudioMiddleLayer(core *core.Core, graphicsEnabled bool = true) (*AudioMiddleLayer, error){
-	return nil, 
+func NewGraphicMT(core interface{}) (*GraphicMT, error){
+	graphicMT := &GraphicMT{}
+	coreGraphic, ok := core.(Core.IGraphic)
+	if ok != true {
+		// logger.log
+		return nil, errors.New("Error to load graphic component from this core.")
+	}
+	graphicMT.coreGraphic = coreGraphic
+	return graphicMT, nil
 }
 
-func (self *AudioMiddleLayer) EnableGraphics() error{
-	return nil
+func (self *GraphicMT)EnableGraphic() error{
+	return errors.New("Not implemented!")
 }
 
-func (self *AudioMiddleLayer) DisableGrahics() error{
-	return nil
+func (self *GraphicMT)DisableGraphic() error{
+	return errors.New("Not implemented!")
 }
 
-func (self *AudioMiddleLayer) GetScreenShot() error{
-	return nil
+// Get infomation of frame
+func (self *GraphicMT)GetFrameBuffer() ([]byte, error){
+	return self.coreGraphic.GetFrameBuffer()
 }
 
-
-func (self *Core) Buffer() *image.RGBA {
-	return Core.PPU.front
-}
-
-func (self *Core) BackgroundColor() color.RGBA {
-	return Palette[Core.PPU.readPalette(0)%64]
+func (self *GraphicMT)GetFrameId() (int, error){
+	return self.coreGraphic.GetFrameId()
 }

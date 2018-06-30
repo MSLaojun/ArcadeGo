@@ -1,5 +1,6 @@
 package core
 
 type IGraphic interface{
-	GetFrame() //<frametype>
+	GetFrameBuffer() ([]byte, error)
+	GetFrameId() (int, error)
 }

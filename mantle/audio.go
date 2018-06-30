@@ -1,47 +1,29 @@
 package mantle
 
+import (
+	"errors"
+	Core "github.com/MSLaojun/ArcadeGo/core"
+)
 
-// 
-// Audio middle layer
-// 
-
-type AudioMiddleLayer struct{
-	emuCore  	*core.Core
-
-	audioEnabled bool
+type AudioMT struct{
+	coreAudio		Core.IAudio
 }
 
-func NewAudioMiddleLayer(core *core.Core, audioEnabled bool = true) (*AudioMiddleLayer, error){
-	return nil, 
-}
-
-func (self *AudioMiddleLayer) EnableAudio() error{
-	return nil
-}
-
-func (self *AudioMiddleLayer) DisableAudio() error{
-	return nil
-}
-
-func (self *AudioMiddleLayer) GetAudioData() error{
-	return nil
-}
-
-func (self *Core) SetAudioChannel(channel chan float32) {
-	Core.APU.channel = channel
-}
-
-func (self *Core) SetAudioSampleRate(sampleRate float64) {
-	if sampleRate != 0 {
-		// Convert samples per second to cpu steps per sample
-		Core.APU.sampleRate = CPUFrequency / sampleRate
-		// Initialize filters
-		Core.APU.filterChain = FilterChain{
-			HighPassFilter(float32(sampleRate), 90),
-			HighPassFilter(float32(sampleRate), 440),
-			LowPassFilter(float32(sampleRate), 14000),
-		}
-	} else {
-		Core.APU.filterChain = nil
+func NewAudioMT(core interface{}) (*AudioMT, error){
+	audioMT := &AudioMT{}
+	coreAudio, ok := core.(Core.IAudio)
+	if ok != true {
+		// logger.log
+		return nil, errors.New("Error to load audio component from this core.")
 	}
+	audioMT.coreAudio = coreAudio
+	return audioMT, nil
+}
+
+func (self *AudioMT)EnableAudio() error{
+	return errors.New("Not implemented!")
+}
+
+func (self *AudioMT)DisableAudio() error{
+	return errors.New("Not implemented!")
 }
